@@ -7,7 +7,6 @@ import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
-        String[] phrases = {"test1","tes2","test3","test4","test5"};
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             Notification bot = new Notification();
@@ -17,9 +16,9 @@ public class Main {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    bot.sendMessage(phrases);
+                    bot.sendMessage();
                 }
-            },0,60000);
+            },0,24 * 60 * 60 * 1000);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

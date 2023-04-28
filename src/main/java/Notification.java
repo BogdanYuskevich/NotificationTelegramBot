@@ -3,6 +3,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Random;
 
 public class Notification extends TelegramLongPollingBot {
@@ -18,15 +20,22 @@ public class Notification extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMessage(String[] phrases) {
+    private double calculatePercentageOfYear() {
+        Calendar now = Calendar.getInstance();
+        int year = now.get(Calendar.YEAR);
+        int dayOfYear = now.get(Calendar.DAY_OF_YEAR);
+        int totalDaysInYear = now.getActualMaximum(Calendar.DAY_OF_YEAR);
+        return ((double) dayOfYear / totalDaysInYear) * 100;
+    }
+
+    public void sendMessage() {
         if (chatId != null) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
-
-            Random random = new Random();
-            int index = random.nextInt(phrases.length);
-            String text = phrases[index];
-
+            double percentageOfYear = calculatePercentageOfYear();
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            String responseText = "У році пройшло " + decimalFormat.format(percentageOfYear) + "%";
+            String text = responseText;
             sendMessage.setText(text);
             try {
                 execute(sendMessage);
